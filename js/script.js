@@ -51,6 +51,19 @@ function updateDistribution(visibleCards) {
   veryPoorBar.style.width = `${getPercent(veryPoor)}%`;
 }
 
+// leaflet //
+const map = L.map('map').setView([42.0, -93.5], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Iowa markers
+L.marker([41.5868, -93.6250]).addTo(map).bindPopup("Des Moines River");
+L.marker([41.9779, -91.6656]).addTo(map).bindPopup("Cedar River");
+L.marker([41.6611, -91.5302]).addTo(map).bindPopup("Iowa River");
+L.marker([42.4999, -96.4003]).addTo(map).bindPopup("Missouri Tributary");
+
 function filterStations() {
   const searchValue = searchInput.value.trim().toLowerCase();
   const selectedQuality = qualityFilter.value.toLowerCase();

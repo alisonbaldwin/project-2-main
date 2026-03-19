@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iowa Water Quality Monitor</title>
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 
@@ -138,15 +139,7 @@
           <div class="status-chip">Live Monitoring</div>
         </div>
 
-        <div class="map-placeholder">
-          <div class="river"></div>
-          <div class="station one"></div>
-          <div class="station two"></div>
-          <div class="station three"></div>
-          <div class="station four"></div>
-          <div class="station five"></div>
-          <div class="station six"></div>
-        </div>
+        <div id="map"></div>
 
         <div class="city-grid" id="cityGrid">
           <div class="city-card" data-name="Des Moines River" data-location="Des Moines, Iowa" data-quality="excellent">
@@ -221,6 +214,7 @@
     </main>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="./js/script.js"></script>
 </body>
 </html>
