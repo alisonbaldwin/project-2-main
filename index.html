@@ -1,1 +1,226 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iowa Water Quality Monitor</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="logo">💧</div>
+      <div class="title-group">
+        <h1>Iowa Water Quality Monitor</h1>
+        <p>Real-time monitoring of water quality across Iowa's rivers and streams</p>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="left-column">
+        <div class="card panel">
+          <div class="panel-header">
+            <h2>Filter Stations</h2>
+            <span class="badge" id="stationCount">4 of 4 stations</span>
+          </div>
+
+          <div class="field">
+            <label for="searchInput">Search by name or location</label>
+            <input
+              id="searchInput"
+              class="input"
+              type="text"
+              placeholder="Search stations..."
+            >
+          </div>
+
+          <div class="field">
+            <label for="qualityFilter">Water Quality Level</label>
+            <select id="qualityFilter" class="select">
+              <option value="all">All Quality Levels</option>
+              <option value="excellent">Excellent</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="poor">Poor</option>
+              <option value="very poor">Very Poor</option>
+            </select>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="legend">
+            <h3>Quality Legend</h3>
+            <ul class="legend-list">
+              <li class="legend-item"><span class="dot" style="background: var(--excellent)"></span>Excellent</li>
+              <li class="legend-item"><span class="dot" style="background: var(--good)"></span>Good</li>
+              <li class="legend-item"><span class="dot" style="background: var(--fair)"></span>Fair</li>
+              <li class="legend-item"><span class="dot" style="background: var(--poor)"></span>Poor</li>
+              <li class="legend-item"><span class="dot" style="background: var(--very-poor)"></span>Very Poor</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card stats-card">
+          <h2>Overall Statistics</h2>
+          <div class="stats-grid">
+            <div class="stat-box stat-blue">
+              <div class="stat-label">Avg pH Level</div>
+              <div class="stat-value blue-text">7.72</div>
+            </div>
+
+            <div class="stat-box stat-cyan">
+              <div class="stat-label">Avg DO</div>
+              <div class="stat-value cyan-text">7.5<span class="stat-unit">mg/L</span></div>
+            </div>
+
+            <div class="stat-box stat-green">
+              <div class="stat-label">Safe Stations</div>
+              <div class="stat-value green-text">16<span class="stat-unit">/20</span></div>
+            </div>
+
+            <div class="stat-box stat-amber">
+              <div class="stat-label">Avg Turbidity</div>
+              <div class="stat-value amber-text">10.0<span class="stat-unit">NTU</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card quality-card">
+          <h2>Quality Distribution</h2>
+          <div class="distribution-list">
+            <div class="distribution-row">
+              <div class="distribution-head">
+                <span>Excellent</span>
+                <span class="distribution-value excellent-text" id="excellentCount">1 (25%)</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill excellent-fill" id="excellentBar" style="width: 25%"></div></div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="distribution-head">
+                <span>Good</span>
+                <span class="distribution-value good-text" id="goodCount">1 (25%)</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill good-fill" id="goodBar" style="width: 25%"></div></div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="distribution-head">
+                <span>Fair</span>
+                <span class="distribution-value fair-text" id="fairCount">1 (25%)</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill fair-fill" id="fairBar" style="width: 25%"></div></div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="distribution-head">
+                <span>Poor</span>
+                <span class="distribution-value poor-text" id="poorCount">1 (25%)</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill poor-fill" id="poorBar" style="width: 25%"></div></div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="distribution-head">
+                <span>Very Poor</span>
+                <span class="distribution-value very-poor-text" id="veryPoorCount">0 (0%)</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill very-poor-fill" id="veryPoorBar" style="width: 0%"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card main-panel">
+        <div class="main-header">
+          <h2>Water Quality by Iowa City</h2>
+          <div class="status-chip">Live Monitoring</div>
+        </div>
+
+        <div class="map-placeholder">
+          <div class="river"></div>
+          <div class="station one"></div>
+          <div class="station two"></div>
+          <div class="station three"></div>
+          <div class="station four"></div>
+          <div class="station five"></div>
+          <div class="station six"></div>
+        </div>
+
+        <div class="city-grid" id="cityGrid">
+          <div class="city-card" data-name="Des Moines River" data-location="Des Moines, Iowa" data-quality="excellent">
+            <div class="city-top">
+              <div>
+                <div class="city-name">Des Moines River</div>
+                <div class="city-meta">Des Moines, Iowa</div>
+              </div>
+              <span class="pill excellent">Excellent</span>
+            </div>
+
+            <div class="metrics">
+              <div class="metric"><small>pH</small><strong>7.8</strong></div>
+              <div class="metric"><small>DO</small><strong>8.1 mg/L</strong></div>
+              <div class="metric"><small>Turbidity</small><strong>3 NTU</strong></div>
+            </div>
+          </div>
+
+          <div class="city-card" data-name="Cedar River" data-location="Cedar Rapids, Iowa" data-quality="good">
+            <div class="city-top">
+              <div>
+                <div class="city-name">Cedar River</div>
+                <div class="city-meta">Cedar Rapids, Iowa</div>
+              </div>
+              <span class="pill good">Good</span>
+            </div>
+
+            <div class="metrics">
+              <div class="metric"><small>pH</small><strong>7.4</strong></div>
+              <div class="metric"><small>DO</small><strong>7.3 mg/L</strong></div>
+              <div class="metric"><small>Turbidity</small><strong>7 NTU</strong></div>
+            </div>
+          </div>
+
+          <div class="city-card" data-name="Iowa River" data-location="Iowa City, Iowa" data-quality="fair">
+            <div class="city-top">
+              <div>
+                <div class="city-name">Iowa River</div>
+                <div class="city-meta">Iowa City, Iowa</div>
+              </div>
+              <span class="pill fair">Fair</span>
+            </div>
+
+            <div class="metrics">
+              <div class="metric"><small>pH</small><strong>7.1</strong></div>
+              <div class="metric"><small>DO</small><strong>6.8 mg/L</strong></div>
+              <div class="metric"><small>Turbidity</small><strong>12 NTU</strong></div>
+            </div>
+          </div>
+
+          <div class="city-card" data-name="Missouri Tributary" data-location="Sioux City, Iowa" data-quality="poor">
+            <div class="city-top">
+              <div>
+                <div class="city-name">Missouri Tributary</div>
+                <div class="city-meta">Sioux City, Iowa</div>
+              </div>
+              <span class="pill poor">Poor</span>
+            </div>
+
+            <div class="metrics">
+              <div class="metric"><small>pH</small><strong>6.6</strong></div>
+              <div class="metric"><small>DO</small><strong>5.4 mg/L</strong></div>
+              <div class="metric"><small>Turbidity</small><strong>18 NTU</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <p id="noResultsMessage" class="no-results">
+          No stations match your search.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/script.js"></script>
+</body>
+</html>
