@@ -29,6 +29,18 @@ function stationGrouping(timeSeries) {
   return stations;
 }
 
+function createStationCard(stationID, station) {
+  const card = document.createElement("div");
+  card.classList.add("city-card")
+
+  const quality = classifyStation(station.parameters);
+
+  card.dataset.name = station.siteName;
+  card.dataset.location = `${station.coords.latitude}, ${station.coords.longitude}`;
+  card.dataset.quality = quality;
+}
+
+
 const searchInput = document.getElementById("searchInput");
 const qualityFilter = document.getElementById("qualityFilter");
 const cityCards = document.querySelectorAll(".city-card");
