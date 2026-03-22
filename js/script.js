@@ -1,3 +1,34 @@
+const usgs_url = 
+  "https://waterservices.usgs.gov/nwis/iv/?format=json&stateCd=IA&parameterCd=00300,63680,00095,00400&period=P1D"
+
+async function fetchusgsURL() {
+  const response = await fetch(usgs_url);
+  const data = await response.json();
+  return data.value.timeSeries;
+}
+
+function stationGrouping(timeSeries) {
+  const stations = {};
+
+  timeSeries.forEach(series => {
+    const site = series.sourceInfo.siteCode[0].value;
+    const param = series.variable.variableCode[0].value;
+    const latest = getLatestValue(series);
+
+    if (!stations[site]) {
+      stations[site] = {
+        siteName: series.sourceInfo.siteName,
+        coords: series.sourceInfo.geoLocation.geogLocation,
+        parameters: {}
+      };
+    }
+
+    stations[site].parameters[param] = latest;
+  });
+
+  return stations;
+}
+
 const searchInput = document.getElementById("searchInput");
 const qualityFilter = document.getElementById("qualityFilter");
 const cityCards = document.querySelectorAll(".city-card");
