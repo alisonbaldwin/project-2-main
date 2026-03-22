@@ -1,3 +1,4 @@
+//fetch the api
 const usgs_url = 
   "https://waterservices.usgs.gov/nwis/iv/?format=json&stateCd=IA&parameterCd=00300,63680,00095,00400&period=P1D"
 
@@ -7,6 +8,7 @@ async function fetchusgsURL() {
   return data.value.timeSeries;
 }
 
+//sort the json files
 function stationGrouping(timeSeries) {
   const stations = {};
 
@@ -29,6 +31,7 @@ function stationGrouping(timeSeries) {
   return stations;
 }
 
+//station cards
 function createStationCard(stationID, station) {
   const card = document.createElement("div");
   card.classList.add("city-card")
@@ -38,7 +41,20 @@ function createStationCard(stationID, station) {
   card.dataset.name = station.siteName;
   card.dataset.location = `${station.coords.latitude}, ${station.coords.longitude}`;
   card.dataset.quality = quality;
+
+  card.innerHTML = `
+  <h3>${station.siteName}<h3>
+  <p><strong>DO:</strong> ${station.parameters["00300"]?.value ?? "—"}</p>
+  <p><strong>Turbidity:</strong> ${station.parameters["63680"]?.value ?? "—"}</p>
+  <p><strong>Conductivity:</strong> ${station.parameters["00095"]?.value ?? "—"}</p>
+  <p><strong>pH:</strong> ${station.parameters["00400"]?.value ?? "—"}</p>
+  <p><strong>Temp:</strong> ${station.parameters["00010"]?.value ?? "—"}</p>
+  <p><strong>Quality:</strong> ${quality}</p>
+`;
+  document.getElementById("stationList").appendChild(card);
+  return card;
 }
+
 
 
 const searchInput = document.getElementById("searchInput");
