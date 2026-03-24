@@ -1,3 +1,4 @@
+
 const searchInput = document.getElementById("searchInput");
 const qualityFilter = document.getElementById("qualityFilter");
 const cityCards = document.querySelectorAll(".city-card");
@@ -58,44 +59,63 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Iowa markers
-L.marker([41.5868, -93.6250]).addTo(map).bindPopup("Des Moines River");
-L.marker([41.9779, -91.6656]).addTo(map).bindPopup("Cedar River");
-L.marker([41.6611, -91.5302]).addTo(map).bindPopup("Iowa River");
-L.marker([42.4999, -96.4003]).addTo(map).bindPopup("Missouri Tributary");
+function buildPopup(row) {
+  return `
+    <strong>${row.nickname || row.uid}</strong><br>
+    ${row.river || "Unknown river"}<br><br>
 
-function filterStations() {
-  const searchValue = searchInput.value.trim().toLowerCase();
-  const selectedQuality = qualityFilter.value.toLowerCase();
+    <strong>Nitrate:</strong> ${row.avg_nitrate_con ?? "—"}<br>
+  `;
+}
 
-  let visibleCount = 0;
-  const visibleCards = [];
+function getMarkerColor(row) {
+  const n = row.avg_nitrate_con;
 
-  cityCards.forEach((card) => {
-    const name = card.dataset.name.toLowerCase();
-    const location = card.dataset.location.toLowerCase();
-    const quality = card.dataset.quality.toLowerCase();
+  if (n > 10) return "#d73027";      // high nitrate
+  if (n > 5) return "#fc8d59";       // medium
+  return "#1a9850";                  // low
+}
 
-    const matchesSearch =
-      name.includes(searchValue) || location.includes(searchValue);
+Papa.parse("data/IWQIS_march10merge.csv", {
+  download: true,
+  header: true,
+  dynamicTyping: true,
+  skipEmptyLines: true,
+  transformHeader: h => h.trim(),
+  complete: function(results) {
+    const rows = results.data;
 
-    const matchesQuality =
-      selectedQuality === "all" || quality === selectedQuality;
+    rows.forEach(row => {
+      const lat = parseFloat(row.latitude);
+      const lon = parseFloat(row.longitude);
 
-    if (matchesSearch && matchesQuality) {
-      card.style.display = "block";
-      visibleCount++;
-      visibleCards.push(card);
-    } else {
-      card.style.display = "none";
-    }
-  });
+      if (isNaN(lat) || isNaN(lon)) return;
+
+      L.circleMarker([lat, lon], {
+        radius: 7,
+        color: getMarkerColor(row),
+        weight: 2,
+        fillOpacity: 0.85
+      })
+      .bindPopup(buildPopup(row))
+      .addTo(map);
+    });
+  }
+});
+
+
+cityCards.forEach(card => {
+  card.style.display = "block";
+});
+stationCount.textContent = `${cityCards.length} of ${cityCards.length} stations`;
+noResultsMessage.style.display = "none";
+updateDistribution(cityCards);
 
   stationCount.textContent = `${visibleCount} of ${cityCards.length} stations`;
   noResultsMessage.style.display = visibleCount === 0 ? "block" : "none";
 
   updateDistribution(visibleCards);
-}
+
 
 searchInput.addEventListener("input", filterStations);
 qualityFilter.addEventListener("change", filterStations);
