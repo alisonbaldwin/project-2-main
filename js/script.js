@@ -75,7 +75,19 @@ function getMarkerColor(row) {
   if (n > 5) return "#fc8d59";       // medium
   return "#1a9850";                  // low
 }
+// drainage bounds in WGS84
+const drainageBounds = [
+  [40.327722924, -96.647446502],   // Ymin, Xmin
+  [43.587264673, -90.015945687]    // Ymax, Xmax
+];
 
+// drainage map overlay
+L.imageOverlay('data/drainage.png', drainageBounds, {
+  opacity: 0.7
+}).addTo(map);
+
+// zoom to the drainage raster
+map.fitBounds(drainageBounds);
 Papa.parse("data/IWQIS_march10merge.csv", {
   download: true,
   header: true,
