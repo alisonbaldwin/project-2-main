@@ -103,21 +103,18 @@ Papa.parse("data/IWQIS_march10merge.csv", {
   }
 });
 
+//land cover map
+
+L.tileLayer.wms("https://www.mrlc.gov/geoserver/mrlc_display/wms", {
+  layers: "NLCD_2021_Land_Cover_L48",
+  format: "image/png",
+  transparent: true
+}).addTo(map);
+
+
+
 
 cityCards.forEach(card => {
   card.style.display = "block";
 });
-stationCount.textContent = `${cityCards.length} of ${cityCards.length} stations`;
-noResultsMessage.style.display = "none";
-updateDistribution(cityCards);
 
-  stationCount.textContent = `${visibleCount} of ${cityCards.length} stations`;
-  noResultsMessage.style.display = visibleCount === 0 ? "block" : "none";
-
-  updateDistribution(visibleCards);
-
-
-searchInput.addEventListener("input", filterStations);
-qualityFilter.addEventListener("change", filterStations);
-
-filterStations();
