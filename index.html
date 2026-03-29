@@ -21,11 +21,6 @@
     <main class="dashboard">
       <section class="left-column">
         <div class="card panel">
-          <div class="panel-header">
-            <h2>Filter Stations</h2>
-            <span class="badge" id="stationCount">4 of 4 stations</span>
-          </div>
-
           <div class="field">
             <label for="searchInput">Search by name or location</label>
             <input
@@ -62,30 +57,27 @@
           </div>
         </div>
 
-        <div class="card stats-card">
-          <h2>Overall Statistics</h2>
-          <div class="stats-grid">
-            <div class="stat-box stat-blue">
-              <div class="stat-label">Avg pH Level</div>
-              <div class="stat-value blue-text">7.72</div>
-            </div>
-
-            <div class="stat-box stat-cyan">
-              <div class="stat-label">Avg DO</div>
-              <div class="stat-value cyan-text">7.5<span class="stat-unit">mg/L</span></div>
-            </div>
-
-            <div class="stat-box stat-green">
-              <div class="stat-label">Safe Stations</div>
-              <div class="stat-value green-text">16<span class="stat-unit">/20</span></div>
-            </div>
-
-            <div class="stat-box stat-amber">
-              <div class="stat-label">Avg Turbidity</div>
-              <div class="stat-value amber-text">10.0<span class="stat-unit">NTU</span></div>
-            </div>
-          </div>
+        <div class="stats-grid">
+        <div class="stat-box stat-blue">
+          <div class="stat-label">Avg pH</div>
+          <div class="stat-value blue-text" id="avgPhStat">—</div>
         </div>
+
+        <div class="stat-box stat-cyan">
+          <div class="stat-label">Avg DO</div>
+          <div class="stat-value cyan-text" id="avgDOStat">—<span class="stat-unit">mg/L</span></div>
+        </div>
+
+        <div class="stat-box stat-green">
+          <div class="stat-label">Safe Stations</div>
+          <div class="stat-value green-text" id="safeStationsStat">—<span class="stat-unit">/—</span></div>
+        </div>
+
+        <div class="stat-box stat-amber">
+          <div class="stat-label">Avg Turbidity</div>
+          <div class="stat-value amber-text" id="avgTurbidityStat">—<span class="stat-unit">NTU</span></div>
+        </div>
+      </div>
 
         <div class="card quality-card">
           <h2>Quality Distribution</h2>

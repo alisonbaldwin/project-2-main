@@ -17,6 +17,12 @@ const fairBar = document.getElementById("fairBar");
 const poorBar = document.getElementById("poorBar");
 const veryPoorBar = document.getElementById("veryPoorBar");
 
+//avg of water data
+const avgPhStat = document.getElementById("avgPhStat");
+const avgDOStat = document.getElementById("avgDOStat");
+const safeStationsStat = document.getElementById("safeStationsStat");
+const avgTurbidityStat = document.getElementById("avgTurbidityStat");
+
 function updateDistribution(visibleCards) {
   const total = visibleCards.length;
 
@@ -132,12 +138,85 @@ function matchesQuality(row, selectedQuality) {
   return getQualityLabel(row) === selectedQuality;
 }
 
+function averageOf(rows, key) {
+  const validValues = rows
+    .map(row => row[key])
+    .filter(value => value !== null && value !== undefined && !Number.isNaN(value));
+
+  if (validValues.length === 0) return null;
+
+  const sum = validValues.reduce((total, value) => total + Number(value), 0);
+  return sum / validValues.length;
+}
+
+function updateOverallStats(visibleRows) {
+  const avgPh = averageOf(visibleRows, "avg_ph");
+  const avgDO = averageOf(visibleRows, "avg_diss_oxy_con");
+  const avgTurbidity = averageOf(visibleRows, "avg_turbi_mean");
+
+  const safeStations = visibleRows.filter(row => {
+    const quality = getQualityLabel(row);
+    return quality === "good" || quality === "fair";
+  }).length;
+
+  if (avgPhStat) {
+    avgPhStat.textContent = avgPh !== null ? avgPh.toFixed(2) : "—";
+  }
+
+  if (avgDOStat) {
+    avgDOStat.textContent = avgDO !== null ? avgDO.toFixed(1) : "—";
+  }
+
+  if (avgTurbidityStat) {
+    avgTurbidityStat.textContent = avgTurbidity !== null ? avgTurbidity.toFixed(1) : "—";
+  }
+
+  if (safeStationsStat) {
+    safeStationsStat.innerHTML = `${safeStations}<span class="stat-unit">/${visibleRows.length}</span>`;
+  }
+}
+
+function updateDistributionFromRows(visibleRows) {
+  const total = visibleRows.length;
+
+  let excellent = 0;
+  let good = 0;
+  let fair = 0;
+  let poor = 0;
+  let veryPoor = 0;
+
+  visibleRows.forEach((row) => {
+    const quality = getQualityLabel(row);
+
+    if (quality === "excellent") excellent++;
+    else if (quality === "good") good++;
+    else if (quality === "fair") fair++;
+    else if (quality === "poor") poor++;
+    else if (quality === "very poor") veryPoor++;
+  });
+
+  const getPercent = (count) => total > 0 ? ((count / total) * 100).toFixed(0) : 0;
+
+  excellentCount.textContent = `${excellent} (${getPercent(excellent)}%)`;
+  goodCount.textContent = `${good} (${getPercent(good)}%)`;
+  fairCount.textContent = `${fair} (${getPercent(fair)}%)`;
+  poorCount.textContent = `${poor} (${getPercent(poor)}%)`;
+  veryPoorCount.textContent = `${veryPoor} (${getPercent(veryPoor)}%)`;
+
+  excellentBar.style.width = `${getPercent(excellent)}%`;
+  goodBar.style.width = `${getPercent(good)}%`;
+  fairBar.style.width = `${getPercent(fair)}%`;
+  poorBar.style.width = `${getPercent(poor)}%`;
+  veryPoorBar.style.width = `${getPercent(veryPoor)}%`;
+}
+
 function applyFilters() {
   const searchTerm = searchInput.value.trim().toLowerCase();
   const selectedQuality = qualityFilter.value.toLowerCase();
 
   let visibleCount = 0;
   const visibleBounds = [];
+  const visibleRows = [];
 
   stationMarkers.forEach(({ row, marker }) => {
     const matchesText = matchesSearch(row, searchTerm);
@@ -150,6 +229,7 @@ function applyFilters() {
       }
       visibleCount++;
       visibleBounds.push(marker.getLatLng());
+      visibleRows.push(row);
     } else {
       if (map.hasLayer(marker)) {
         map.removeLayer(marker);
@@ -161,9 +241,11 @@ function applyFilters() {
     stationCount.textContent = `${visibleCount} stations loaded`;
   }
 
-  applyFilters(); 
 
   noResultsMessage.style.display = visibleCount === 0 ? "block" : "none";
+
+  updateOverallStats(visibleRows);
+  updateDistributionFromRows(visibleRows);
 
   if (visibleBounds.length > 0) {
     map.fitBounds(visibleBounds, { padding: [30, 30] });
@@ -227,6 +309,8 @@ Papa.parse("data/IWQIS_march10merge.csv", {
     if (stationCount) {
       stationCount.textContent = `${validCount} stations loaded`;
     }
+
+    applyFilters();
   }
 });
 
