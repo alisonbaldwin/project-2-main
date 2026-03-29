@@ -140,6 +140,22 @@
         </div>
 
         <div id="map"></div>
+        <div class="city-card selected-station" id="selectedStation">
+          <div class="city-top">
+            <div>
+              <div class="city-name" id="selectedName">Select a station</div>
+              <div class="city-meta" id="selectedLocation">—</div>
+            </div>
+            <span class="pill" id="selectedQuality">—</span>
+          </div>
+
+          <div class="metrics">
+            <div class="metric"><small>pH</small><strong id="selectedPh">—</strong></div>
+            <div class="metric"><small>DO</small><strong id="selectedDO">—</strong></div>
+            <div class="metric"><small>Turbidity</small><strong id="selectedTurb">—</strong></div>
+          </div>
+        </div>
+
 
         <div class="city-grid" id="cityGrid">
           <div class="city-card" data-name="Des Moines River" data-location="Des Moines, Iowa" data-quality="excellent">
