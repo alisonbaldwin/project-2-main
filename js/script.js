@@ -23,6 +23,15 @@ const avgDOStat = document.getElementById("avgDOStat");
 const safeStationsStat = document.getElementById("safeStationsStat");
 const avgTurbidityStat = document.getElementById("avgTurbidityStat");
 
+// comparison bars
+const comparisonPhText = document.getElementById("comparisonPhText");
+const comparisonDOText = document.getElementById("comparisonDOText");
+const comparisonTurbText = document.getElementById("comparisonTurbText");
+
+const comparisonPhBar = document.getElementById("comparisonPhBar");
+const comparisonDOBar = document.getElementById("comparisonDOBar");
+const comparisonTurbBar = document.getElementById("comparisonTurbBar");
+
 function updateDistribution(visibleCards) {
   const total = visibleCards.length;
 
@@ -149,6 +158,7 @@ function averageOf(rows, key) {
   return sum / validValues.length;
 }
 
+//avg stats
 function updateOverallStats(visibleRows) {
   const avgPh = averageOf(visibleRows, "avg_ph");
   const avgDO = averageOf(visibleRows, "avg_diss_oxy_con");
@@ -173,6 +183,43 @@ function updateOverallStats(visibleRows) {
 
   if (safeStationsStat) {
     safeStationsStat.innerHTML = `${safeStations}<span class="stat-unit">/${visibleRows.length}</span>`;
+  }
+}
+
+//key metrics
+function updateKeyMetricsComparison(visibleRows) {
+  const avgPh = averageOf(visibleRows, "avg_ph");
+  const avgDO = averageOf(visibleRows, "avg_diss_oxy_con");
+  const avgTurbidity = averageOf(visibleRows, "avg_turbi_mean");
+
+  if (comparisonPhText) {
+    comparisonPhText.textContent =
+      avgPh !== null ? `${avgPh.toFixed(2)} / 7.5 target` : "— / 7.5 target";
+  }
+
+  if (comparisonDOText) {
+    comparisonDOText.textContent =
+      avgDO !== null ? `${avgDO.toFixed(1)} / 7.0 mg/L target` : "— / 7.0 mg/L target";
+  }
+
+  if (comparisonTurbText) {
+    comparisonTurbText.textContent =
+      avgTurbidity !== null ? `${avgTurbidity.toFixed(1)} / 5.0 NTU target` : "— / 5.0 NTU target";
+  }
+
+  if (comparisonPhBar) {
+    const phPercent = avgPh !== null ? Math.min((avgPh / 7.5) * 100, 100) : 0;
+    comparisonPhBar.style.width = `${phPercent}%`;
+  }
+
+  if (comparisonDOBar) {
+    const doPercent = avgDO !== null ? Math.min((avgDO / 7.0) * 100, 100) : 0;
+    comparisonDOBar.style.width = `${doPercent}%`;
+  }
+
+  if (comparisonTurbBar) {
+    const turbPercent = avgTurbidity !== null ? Math.min((avgTurbidity / 5.0) * 100, 100) : 0;
+    comparisonTurbBar.style.width = `${turbPercent}%`;
   }
 }
 
@@ -246,6 +293,7 @@ function applyFilters() {
 
   updateOverallStats(visibleRows);
   updateDistributionFromRows(visibleRows);
+  updateKeyMetricsComparison(visibleRows);
 
   if (visibleBounds.length > 0) {
     map.fitBounds(visibleBounds, { padding: [30, 30] });

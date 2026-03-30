@@ -57,6 +57,43 @@
           </div>
         </div>
 
+        <div class="card comparison-card">
+  <h2>Key Metrics Comparison</h2>
+
+    <div class="comparison-group">
+      <div class="comparison-head">
+        <span>pH Level</span>
+        <span id="comparisonPhText">— / 7.5 target</span>
+      </div>
+      <div class="comparison-track">
+        <div class="comparison-fill comparison-ph" id="comparisonPhBar"></div>
+        <div class="comparison-target"></div>
+      </div>
+    </div>
+
+    <div class="comparison-group">
+      <div class="comparison-head">
+        <span>Dissolved Oxygen</span>
+        <span id="comparisonDOText">— / 7.0 mg/L target</span>
+      </div>
+      <div class="comparison-track">
+        <div class="comparison-fill comparison-do" id="comparisonDOBar"></div>
+        <div class="comparison-target"></div>
+      </div>
+    </div>
+
+  <div class="comparison-group">
+    <div class="comparison-head">
+      <span>Turbidity (lower is better)</span>
+      <span id="comparisonTurbText">— / 5.0 NTU target</span>
+    </div>
+    <div class="comparison-track">
+      <div class="comparison-fill comparison-turb" id="comparisonTurbBar"></div>
+      <div class="comparison-target"></div>
+    </div>
+  </div>
+</div>
+
         <div class="stats-grid">
         <div class="stat-box stat-blue">
           <div class="stat-label">Avg pH</div>
@@ -77,6 +114,7 @@
           <div class="stat-label">Avg Turbidity</div>
           <div class="stat-value amber-text" id="avgTurbidityStat">—<span class="stat-unit">NTU</span></div>
         </div>
+
       </div>
 
         <div class="card quality-card">
@@ -148,72 +186,6 @@
           </div>
         </div>
 
-
-        <div class="city-grid" id="cityGrid">
-          <div class="city-card" data-name="Des Moines River" data-location="Des Moines, Iowa" data-quality="excellent">
-            <div class="city-top">
-              <div>
-                <div class="city-name">Des Moines River</div>
-                <div class="city-meta">Des Moines, Iowa</div>
-              </div>
-              <span class="pill excellent">Excellent</span>
-            </div>
-
-            <div class="metrics">
-              <div class="metric"><small>pH</small><strong>7.8</strong></div>
-              <div class="metric"><small>DO</small><strong>8.1 mg/L</strong></div>
-              <div class="metric"><small>Turbidity</small><strong>3 NTU</strong></div>
-            </div>
-          </div>
-
-          <div class="city-card" data-name="Cedar River" data-location="Cedar Rapids, Iowa" data-quality="good">
-            <div class="city-top">
-              <div>
-                <div class="city-name">Cedar River</div>
-                <div class="city-meta">Cedar Rapids, Iowa</div>
-              </div>
-              <span class="pill good">Good</span>
-            </div>
-
-            <div class="metrics">
-              <div class="metric"><small>pH</small><strong>7.4</strong></div>
-              <div class="metric"><small>DO</small><strong>7.3 mg/L</strong></div>
-              <div class="metric"><small>Turbidity</small><strong>7 NTU</strong></div>
-            </div>
-          </div>
-
-          <div class="city-card" data-name="Iowa River" data-location="Iowa City, Iowa" data-quality="fair">
-            <div class="city-top">
-              <div>
-                <div class="city-name">Iowa River</div>
-                <div class="city-meta">Iowa City, Iowa</div>
-              </div>
-              <span class="pill fair">Fair</span>
-            </div>
-
-            <div class="metrics">
-              <div class="metric"><small>pH</small><strong>7.1</strong></div>
-              <div class="metric"><small>DO</small><strong>6.8 mg/L</strong></div>
-              <div class="metric"><small>Turbidity</small><strong>12 NTU</strong></div>
-            </div>
-          </div>
-
-          <div class="city-card" data-name="Missouri Tributary" data-location="Sioux City, Iowa" data-quality="poor">
-            <div class="city-top">
-              <div>
-                <div class="city-name">Missouri Tributary</div>
-                <div class="city-meta">Sioux City, Iowa</div>
-              </div>
-              <span class="pill poor">Poor</span>
-            </div>
-
-            <div class="metrics">
-              <div class="metric"><small>pH</small><strong>6.6</strong></div>
-              <div class="metric"><small>DO</small><strong>5.4 mg/L</strong></div>
-              <div class="metric"><small>Turbidity</small><strong>18 NTU</strong></div>
-            </div>
-          </div>
-        </div>
 
         <p id="noResultsMessage" class="no-results">
           No stations match your search.
