@@ -74,23 +74,25 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 }).addTo(map);
 
 
-function getMarkerColor(row) {
-  const n = row.avg_nitrate_con;
-
-  if (n === null || n === undefined || Number.isNaN(n)) return "#6b7280";
-  if (n > 10) return "#d73027"; // high nitrate
-  if (n > 5) return "#fc8d59";  // medium
-  return "#1a9850";             // low
-}
-
 function getQualityLabel(row) {
-  const n = row.avg_nitrate_con;
+  const n = Number(row.avg_nitrate_con);
 
-  if (n === null || n === undefined || Number.isNaN(n)) return "unknown";
-  if (n > 10) return "very poor";
-  if (n > 5) return "poor";
-  if (n > 2) return "fair";
-  return "good";
+  if (Number.isNaN(n)) return "unknown";
+  if (n <= 1) return "excellent";
+  if (n <= 2) return "good";
+  if (n <= 5) return "fair";
+  if (n <= 10) return "poor";
+  return "very poor";
+}
+function getMarkerColor(row) {
+  const quality = getQualityLabel(row);
+  
+  if (quality === "very poor") return "#ef4444";
+  if (quality === "poor") return "#f97316";
+  if (quality === "fair") return "#eab308";
+  if (quality === "good") return "#22c55e";
+  if (quality === "excellent") return "#22c55e";
+  return "#9ca3af";
 }
 
 function updateSelectedStation(row) {
