@@ -127,6 +127,109 @@ const markerBounds = [];
 let selectedMarker = null;
 const stationMarkers = [];
 
+//IT BROKE SO HOPEFULLY THIS FIXES IT
+function updateStatsFromSelectedRow(row) {
+  if (avgPhStat) {
+    avgPhStat.textContent =
+      row.avg_ph !== null && row.avg_ph !== undefined
+        ? Number(row.avg_ph).toFixed(2)
+        : "—";
+  }
+
+  if (avgDOStat) {
+    avgDOStat.textContent =
+      row.avg_diss_oxy_con !== null && row.avg_diss_oxy_con !== undefined
+        ? Number(row.avg_diss_oxy_con).toFixed(1)
+        : "—";
+  }
+
+  if (avgTurbidityStat) {
+    avgTurbidityStat.textContent =
+      row.avg_turbi_mean !== null && row.avg_turbi_mean !== undefined
+        ? Number(row.avg_turbi_mean).toFixed(1)
+        : "—";
+  }
+
+  if (safeStationsStat) {
+    const quality = getQualityLabel(row);
+    const isSafe = quality === "good" || quality === "fair" ? 1 : 0;
+    safeStationsStat.innerHTML = `${isSafe}<span class="stat-unit">/1</span>`;
+  }
+
+  // distribution bars based on selected station
+  let excellent = 0;
+  let good = 0;
+  let fair = 0;
+  let poor = 0;
+  let veryPoor = 0;
+
+  const quality = getQualityLabel(row);
+
+  if (quality === "excellent") excellent = 1;
+  else if (quality === "good") good = 1;
+  else if (quality === "fair") fair = 1;
+  else if (quality === "poor") poor = 1;
+  else if (quality === "very poor") veryPoor = 1;
+
+  excellentCount.textContent = `${excellent} (${excellent * 100}%)`;
+  goodCount.textContent = `${good} (${good * 100}%)`;
+  fairCount.textContent = `${fair} (${fair * 100}%)`;
+  poorCount.textContent = `${poor} (${poor * 100}%)`;
+  veryPoorCount.textContent = `${veryPoor} (${veryPoor * 100}%)`;
+
+  excellentBar.style.width = `${excellent * 100}%`;
+  goodBar.style.width = `${good * 100}%`;
+  fairBar.style.width = `${fair * 100}%`;
+  poorBar.style.width = `${poor * 100}%`;
+  veryPoorBar.style.width = `${veryPoor * 100}%`;
+
+  // key metrics comparison card
+  if (comparisonPhText) {
+    comparisonPhText.textContent =
+      row.avg_ph !== null && row.avg_ph !== undefined
+        ? `${Number(row.avg_ph).toFixed(2)} / 7.5 target`
+        : "— / 7.5 target";
+  }
+
+  if (comparisonDOText) {
+    comparisonDOText.textContent =
+      row.avg_diss_oxy_con !== null && row.avg_diss_oxy_con !== undefined
+        ? `${Number(row.avg_diss_oxy_con).toFixed(1)} / 7.0 mg/L target`
+        : "— / 7.0 mg/L target";
+  }
+
+  if (comparisonTurbText) {
+    comparisonTurbText.textContent =
+      row.avg_turbi_mean !== null && row.avg_turbi_mean !== undefined
+        ? `${Number(row.avg_turbi_mean).toFixed(1)} / 5.0 NTU target`
+        : "— / 5.0 NTU target";
+  }
+
+  if (comparisonPhBar) {
+    const phPercent =
+      row.avg_ph !== null && row.avg_ph !== undefined
+        ? Math.min((Number(row.avg_ph) / 7.5) * 100, 100)
+        : 0;
+    comparisonPhBar.style.width = `${phPercent}%`;
+  }
+
+  if (comparisonDOBar) {
+    const doPercent =
+      row.avg_diss_oxy_con !== null && row.avg_diss_oxy_con !== undefined
+        ? Math.min((Number(row.avg_diss_oxy_con) / 7.0) * 100, 100)
+        : 0;
+    comparisonDOBar.style.width = `${doPercent}%`;
+  }
+
+  if (comparisonTurbBar) {
+    const turbPercent =
+      row.avg_turbi_mean !== null && row.avg_turbi_mean !== undefined
+        ? Math.min((Number(row.avg_turbi_mean) / 5.0) * 100, 100)
+        : 0;
+    comparisonTurbBar.style.width = `${turbPercent}%`;
+  }
+}
+
 function matchesSearch(row, searchTerm) {
   const term = searchTerm.trim().toLowerCase();
 
@@ -338,6 +441,7 @@ Papa.parse("data/IWQIS_march10merge.csv", {
         selectedMarker = this;
 
         updateSelectedStation(row);
+        updateStatsFromSelectedRow(row);
       })
       .addTo(map);
 
